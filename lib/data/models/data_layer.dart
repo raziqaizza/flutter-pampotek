@@ -1,0 +1,1 @@
+export 'Obat.dart';
