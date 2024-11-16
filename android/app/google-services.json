@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "668845308710",
+    "project_id": "flutter-pampotek",
+    "storage_bucket": "flutter-pampotek.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668845308710:android:24a91a668e50836e611fe7",
+        "android_client_info": {
+          "package_name": "com.example.flutter_pampotek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTqI-GZl-PRG0CBEWTDzDxegqbcd9fR_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
