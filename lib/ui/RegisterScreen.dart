@@ -28,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void toLoginScreen() {
-    Navigator.pushReplacement(
+    Navigator.pop(
         context,
         MaterialPageRoute(
           builder: (context) => LoginScreen(),
@@ -81,9 +81,18 @@ class MyTextForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextInputType keyboardType = TextInputType.text;
+
+    if (this.hint == "Email Address") {
+      keyboardType = TextInputType.emailAddress;
+    } else {
+      keyboardType = TextInputType.text;
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 12),
       child: TextFormField(
+        keyboardType: keyboardType,
         controller: controller,
         style: TextStyle(color: MaterialTheme.lightScheme().onSurfaceVariant),
         decoration: InputDecoration(
