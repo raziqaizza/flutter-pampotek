@@ -1,37 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/data/controller.dart';
 import 'package:flutter_pampotek/theme.dart';
-import 'package:flutter_pampotek/ui/HomeScreen.dart';
-import 'package:flutter_pampotek/ui/LoginScreen.dart';
-import '../../util.dart';
-import '../../theme.dart';
+import 'package:flutter_pampotek/ui/home_screen.dart';
+import 'package:flutter_pampotek/ui/register_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../util.dart';
+import '../theme.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController namaController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final AuthController _authController = AuthController();
 
-  void handleRegister() {
-    String name = namaController.text;
+  void handleSubmit() {
     String email = emailController.text;
     String password = passwordController.text;
 
-    _authController.registerUser(context, email, password);
+    _authController.loginUser(context, email, password);
   }
 
-  void toLoginScreen() {
-    Navigator.pop(
+  void toRegisterScreen() {
+    Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => RegisterScreen(),
         ));
   }
 
@@ -42,34 +41,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
     MaterialTheme theme = MaterialTheme(textTheme);
 
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Container(
-      decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),
-      padding: EdgeInsets.all(20),
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          const MyHeaderText(text: "Daftarkan akun kamu."),
-          MyTextForm(
-            hint: "Nama",
-            controller: namaController,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),
+          padding: EdgeInsets.all(20),
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 80),
+                child: SvgPicture.asset('images/pampotek_logo.svg'),
+              ),
+              MyHeaderText(text: "Masuk ke akun kamu."),
+              MyTextForm(
+                hint: "Email Address",
+                controller: emailController,
+              ),
+              MyTextForm(
+                hint: "Password",
+                controller: passwordController,
+              ),
+              MyButton(
+                text: "Masuk",
+                onPressed: handleSubmit,
+              ),
+              MyTextButton(
+                text: "Belum punya akun?",
+                onPressed: toRegisterScreen,
+              ),
+            ],
           ),
-          MyTextForm(
-            hint: "Email Address",
-            controller: emailController,
-          ),
-          MyTextForm(
-            hint: "Password",
-            controller: passwordController,
-          ),
-          MyButton(
-            text: "Daftar",
-            onPressed: handleRegister,
-          ),
-          MyTextButton(text: "Sudah punya akun?", onPressed: toLoginScreen),
-        ],
+        ),
       ),
-    )));
+    );
   }
 }
 
@@ -116,7 +120,7 @@ class MyHeaderText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.fromLTRB(0, 120, 0, 36),
+        padding: EdgeInsets.fromLTRB(0, 12, 0, 36),
         child: Text(text, style: Theme.of(context).textTheme.headlineMedium));
   }
 }

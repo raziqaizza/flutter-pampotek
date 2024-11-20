@@ -4,8 +4,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pampotek/ui/HomeScreen.dart';
-import 'package:flutter_pampotek/ui/LoginScreen.dart';
+import 'package:flutter_pampotek/ui/home_screen.dart';
+import 'package:flutter_pampotek/ui/login_screen.dart';
 
 class AuthController {
   final FirebaseAuth _auth = FirebaseAuth.instance;

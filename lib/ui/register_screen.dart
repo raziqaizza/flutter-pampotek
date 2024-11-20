@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/data/controller.dart';
 import 'package:flutter_pampotek/theme.dart';
-import 'package:flutter_pampotek/ui/HomeScreen.dart';
-import 'package:flutter_pampotek/ui/RegisterScreen.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import '../util.dart';
-import '../theme.dart';
+import 'package:flutter_pampotek/ui/home_screen.dart';
+import 'package:flutter_pampotek/ui/login_screen.dart';
+import '../../util.dart';
+import '../../theme.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController namaController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final AuthController _authController = AuthController();
 
-  void handleSubmit() {
+  void handleRegister() {
+    String name = namaController.text;
     String email = emailController.text;
     String password = passwordController.text;
 
-    _authController.loginUser(context, email, password);
+    _authController.registerUser(context, email, password);
   }
 
-  void toRegisterScreen() {
-    Navigator.push(
+  void toLoginScreen() {
+    Navigator.pop(
         context,
         MaterialPageRoute(
-          builder: (context) => RegisterScreen(),
+          builder: (context) => LoginScreen(),
         ));
   }
 
@@ -48,11 +49,11 @@ class _LoginScreenState extends State<LoginScreen> {
       alignment: Alignment.center,
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 80),
-            child: SvgPicture.asset('images/pampotek_logo.svg'),
+          const MyHeaderText(text: "Daftarkan akun kamu."),
+          MyTextForm(
+            hint: "Nama",
+            controller: namaController,
           ),
-          MyHeaderText(text: "Masuk ke akun kamu."),
           MyTextForm(
             hint: "Email Address",
             controller: emailController,
@@ -62,13 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
             controller: passwordController,
           ),
           MyButton(
-            text: "Masuk",
-            onPressed: handleSubmit,
+            text: "Daftar",
+            onPressed: handleRegister,
           ),
-          MyTextButton(
-            text: "Belum punya akun?",
-            onPressed: toRegisterScreen,
-          ),
+          MyTextButton(text: "Sudah punya akun?", onPressed: toLoginScreen),
         ],
       ),
     )));
@@ -118,7 +116,7 @@ class MyHeaderText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.fromLTRB(0, 12, 0, 36),
+        padding: EdgeInsets.fromLTRB(0, 120, 0, 36),
         child: Text(text, style: Theme.of(context).textTheme.headlineMedium));
   }
 }
