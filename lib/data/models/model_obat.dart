@@ -5,3 +5,5 @@ class Obat {
   const Obat(
       {this.namaObat = "", this.deskripsiObat = "", this.jumlahObat = 0});
 }
+
+

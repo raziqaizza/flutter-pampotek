@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pampotek/data/controller.dart';
+import 'package:flutter_pampotek/data/controller/base_controller.dart';
+import 'package:flutter_pampotek/di.dart';
 import 'package:flutter_pampotek/theme.dart';
 import 'package:flutter_pampotek/ui/home_screen.dart';
 import 'package:flutter_pampotek/ui/register_screen.dart';
@@ -17,13 +18,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final AuthController _authController = AuthController();
 
   void handleSubmit() {
     String email = emailController.text;
     String password = passwordController.text;
 
-    _authController.loginUser(context, email, password);
+    locator<AuthController>().loginUser(context, email, password);
   }
 
   void toRegisterScreen() {

@@ -24,6 +24,7 @@ class AuthController {
         });
 
     try {
+      
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -35,7 +36,7 @@ class AuthController {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginScreen(),
+            builder: (context) => const LoginScreen(),
           ));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -69,7 +70,7 @@ class AuthController {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => const HomeScreen(),
           ));
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login successful')),
@@ -84,4 +85,3 @@ class AuthController {
   }
 }
 
-class ObatController {}

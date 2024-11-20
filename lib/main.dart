@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_pampotek/di.dart';
 import 'package:flutter_pampotek/firebase_options.dart';
 import 'package:flutter_pampotek/ui/login_screen.dart';
 import 'util.dart';
@@ -10,6 +11,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setup();
   runApp(const MyApp());
 }
 
