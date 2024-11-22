@@ -9,6 +9,7 @@ import 'package:flutter_pampotek/domain/usecases/delete_obat.dart';
 import 'package:flutter_pampotek/domain/usecases/get_obat.dart';
 import 'package:flutter_pampotek/firebase_options.dart';
 import 'package:flutter_pampotek/ui/add_obat_screen.dart';
+import 'package:flutter_pampotek/ui/edit_obat_screen.dart';
 import 'package:flutter_pampotek/ui/home_screen.dart';
 import 'package:flutter_pampotek/ui/login_screen.dart';
 import 'package:flutter_pampotek/ui/providers/obat_provider.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
         '/addObat': (context) => AddObatScreen(),
+        '/editObat': (context) => EditObatScreen(),
       },
     );
   }
