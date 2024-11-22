@@ -35,6 +35,7 @@ class ObatRepositoryImpl implements ObatRepository {
       if (uid == null) {
         return Stream.value([]);
       }
+
       return _getObatRef().onValue.map((event) {
         if (event.snapshot.value == null) {
           return [];
@@ -42,10 +43,30 @@ class ObatRepositoryImpl implements ObatRepository {
 
         if (event.snapshot.value is List<dynamic>) {
           final data = event.snapshot.value as List<dynamic>;
-          return data.where((e) => e != null).map((e) {
-            final obatJson = Map<String, dynamic>.from(e);
-            return ObatModel.fromJson(obatJson).toEntity();
-          }).toList();
+
+          return data
+              .asMap()
+              .entries
+              .map((entry) {
+                final index = entry.key;
+                final obatJson = entry.value;
+
+                if (obatJson == null) return null;
+
+                final obatMap = Map<String, dynamic>.from(obatJson as Map);
+
+                final entity =
+                    ObatModel.fromJson({...obatMap, "id": index.toString()})
+                        .toEntity();
+
+                // Debug: Print Entity
+                print("Entity: ${entity.id}");
+
+                return ObatModel.fromJson({...obatMap, "id": index.toString()})
+                    .toEntity();
+              })
+              .whereType<ObatEntitiy>()
+              .toList();
         }
         return [];
       });
@@ -62,8 +83,26 @@ class ObatRepositoryImpl implements ObatRepository {
       if (uid == null) {
         throw Exception('Pengguna belum login');
       }
+
       final model = ObatModel.fromEntity(obat);
-      await _getObatRef().child(model.id).set(model.toJson());
+
+      final snapshot = await _getObatRef().get();
+
+      int nextId = 1;
+      if (snapshot.exists) {
+        final data = snapshot.value as List<dynamic>;
+        
+        final validIds = data.asMap().entries
+            .where((entry) => entry.value != null)
+            .map((entry) => entry.key)
+            .toList();
+
+        nextId = validIds.isNotEmpty ? validIds.reduce((a, b) => a > b ? a : b) + 1 : 1;
+      }
+
+      await _getObatRef().child(nextId.toString()).set({
+        ...model.toJson(),
+      });
     } catch (e) {
       rethrow;
     }

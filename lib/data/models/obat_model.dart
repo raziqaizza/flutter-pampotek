@@ -24,7 +24,6 @@ class ObatModel {
   // Konversi NoteModel ke JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'namaObat': namaObat,
       'deskripsiObat': deskripsiObat,
       'jumlahObat': jumlahObat,

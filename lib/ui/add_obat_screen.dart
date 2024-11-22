@@ -1,5 +1,8 @@
+import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
 import 'package:flutter_pampotek/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pampotek/ui/providers/obat_provider.dart';
+import 'package:provider/provider.dart';
 
 class AddObatScreen extends StatefulWidget {
   const AddObatScreen({super.key});
@@ -14,6 +17,20 @@ class _AddObatScreenState extends State<AddObatScreen> {
   final TextEditingController jumlahController = TextEditingController();
 
   void toHomeScreen() {
+    Navigator.pop(context);
+  }
+
+  void handleSubmit() async {
+    String namaObat = namaObatController.text;
+    String deskripsiObat = deskripsiObatController.text;
+    int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
+
+    await Provider.of<ObatProvider>(context, listen: false).addObat(ObatEntitiy(
+        id: "",
+        namaObat: namaObat,
+        deskripsiObat: deskripsiObat,
+        jumlahObat: jumlahObat));
+
     Navigator.pop(context);
   }
 
@@ -41,7 +58,7 @@ class _AddObatScreenState extends State<AddObatScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 MyCancelButton(text: "Batal", onPressed: toHomeScreen),
-                MyButton(text: "Simpan", onPressed: () => {})
+                MyButton(text: "Simpan", onPressed: handleSubmit)
               ],
             )
           ],

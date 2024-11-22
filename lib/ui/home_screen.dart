@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 330,
+                  height: 380,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                     child: Consumer<ObatProvider>(
