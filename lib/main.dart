@@ -1,13 +1,9 @@
 // ignore_for_file: avoid_print
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_pampotek/data/repositories/auth_repository_impl.dart';
 import 'package:flutter_pampotek/data/repositories/base_repository_impl.dart';
 import 'package:flutter_pampotek/di.dart';
-import 'package:flutter_pampotek/domain/repositories/obat_repository.dart';
 import 'package:flutter_pampotek/domain/usecases/add_obat.dart';
 import 'package:flutter_pampotek/domain/usecases/delete_obat.dart';
 import 'package:flutter_pampotek/domain/usecases/get_obat.dart';

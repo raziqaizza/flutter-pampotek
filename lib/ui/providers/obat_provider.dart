@@ -24,8 +24,7 @@ class ObatProvider extends ChangeNotifier {
     });
   }
 
-
-  Future<void> addNote(ObatEntitiy obat) async {
+  Future<void> addObat(ObatEntitiy obat) async {
     await addObatUseCase(obat);
   }
 

@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/data/repositories/base_repository_impl.dart';
 import 'package:flutter_pampotek/di.dart';
 import 'package:flutter_pampotek/theme.dart';
-import 'package:flutter_pampotek/ui/home_screen.dart';
-import 'package:flutter_pampotek/ui/register_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../util.dart';
-import '../theme.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,32 +23,24 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void toRegisterScreen() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RegisterScreen(),
-        ));
+    Navigator.pushReplacementNamed(context, "/register");
   }
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = createTextTheme(context, "Poppins", "Poppins");
-
-    MaterialTheme theme = MaterialTheme(textTheme);
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           alignment: Alignment.center,
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 80),
+                padding: const EdgeInsets.symmetric(vertical: 80),
                 child: SvgPicture.asset('images/pampotek_logo.svg'),
               ),
-              MyHeaderText(text: "Masuk ke akun kamu."),
+              const MyHeaderText(text: "Masuk ke akun kamu."),
               MyTextForm(
                 hint: "Email Address",
                 controller: emailController,
@@ -87,14 +75,14 @@ class MyTextForm extends StatelessWidget {
   Widget build(BuildContext context) {
     TextInputType keyboardType = TextInputType.text;
 
-    if (this.hint == "Email Address") {
+    if (hint == "Email Address") {
       keyboardType = TextInputType.emailAddress;
     } else {
       keyboardType = TextInputType.text;
     }
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: TextFormField(
         keyboardType: keyboardType,
         controller: controller,
@@ -120,7 +108,7 @@ class MyHeaderText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.fromLTRB(0, 12, 0, 36),
+        padding: const EdgeInsets.fromLTRB(0, 12, 0, 36),
         child: Text(text, style: Theme.of(context).textTheme.headlineMedium));
   }
 }
@@ -134,14 +122,14 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(48),
+      padding: const EdgeInsets.all(48),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
             backgroundColor: MaterialTheme.lightScheme().primaryContainer,
             textStyle: TextStyle(
                 color: MaterialTheme.lightScheme().onPrimaryContainer),
-            minimumSize: Size(120, 50),
+            minimumSize: const Size(120, 50),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
         child: Text(
@@ -162,7 +150,7 @@ class MyTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(48),
+      padding: const EdgeInsets.all(48),
       child: TextButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
@@ -170,7 +158,7 @@ class MyTextButton extends StatelessWidget {
               color: MaterialTheme.lightScheme().onPrimaryContainer,
               decoration: TextDecoration.underline),
         ),
-        child: Text(text, style: TextStyle(fontSize: 16)),
+        child: Text(text, style: const TextStyle(fontSize: 16)),
       ),
     );
   }

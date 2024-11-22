@@ -1,18 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/domain/repositories/auth_repository.dart';
-import 'package:flutter_pampotek/ui/home_screen.dart';
-import 'package:flutter_pampotek/ui/login_screen.dart';
 
-class AuthRepositoryImpl implements AuthRepository{
+class AuthRepositoryImpl implements AuthRepository {
   final FirebaseAuth _auth;
-
   AuthRepositoryImpl(this._auth);
-
 
   @override
   Future<void> registerUser(
@@ -37,11 +29,7 @@ class AuthRepositoryImpl implements AuthRepository{
 
       // Kembali ke halaman login setelah berhasil
       Navigator.pop(context);
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
-          ));
+      Navigator.pushReplacementNamed(context, "/login");
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Registration failed: $e')),
@@ -65,23 +53,17 @@ class AuthRepositoryImpl implements AuthRepository{
         });
 
     try {
-      // Proses login
       await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       // Navigasi ke halaman Home setelah login berhasil
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ));
+      Navigator.pushReplacementNamed(context, "/home");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login successful')),
       );
     } catch (e) {
-      // Tampilkan error jika login gagal
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login failed: $e')),
       );

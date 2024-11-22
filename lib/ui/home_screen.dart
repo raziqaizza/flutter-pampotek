@@ -1,22 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/data/repositories/auth_repository_impl.dart';
-import 'package:flutter_pampotek/data/models/data_layer.dart';
 import 'package:flutter_pampotek/di.dart';
 import 'package:flutter_pampotek/ui/providers/obat_provider.dart';
 import 'package:provider/provider.dart';
-import '../util.dart';
 import '../theme.dart';
-import 'package:flutter_pampotek/theme.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = createTextTheme(context, "Poppins", "Poppins");
-    MaterialTheme theme = MaterialTheme(textTheme);
-
     Future.microtask(() {
       Provider.of<ObatProvider>(context, listen: false).fetchObat();
     });
@@ -25,48 +18,48 @@ class HomeScreen extends StatelessWidget {
       color: MaterialTheme.lightScheme().surface,
       child: SafeArea(
         child: Scaffold(
-            appBar: AppBar(
-              flexibleSpace: AppBarCard(username: "username"),
-              automaticallyImplyLeading: false,
+          appBar: AppBar(
+            flexibleSpace: AppBarCard(username: "username"),
+            automaticallyImplyLeading: false,
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 2, 12, 2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const MyHeader(text: "Daftar Obat"),
+                      MyButton(text: "Button", onPressed: () => {})
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 330,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                    child: Consumer<ObatProvider>(
+                      builder: (context, obatProvider, child) {
+                        return ListView.builder(
+                          itemCount: obatProvider.obats.length,
+                          itemBuilder: (context, index) {
+                            final obat = obatProvider.obats[index];
+                            return ItemWidget(
+                              namaObat: obat.namaObat,
+                              deskripsiObat: obat.deskripsiObat,
+                              jumlahObat: obat.jumlahObat,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(12, 2, 12, 2),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        MyHeader(text: "Daftar Obat"),
-                        MyButton(text: "Button", onPressed: () => {})
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 330,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                      child: Consumer<ObatProvider>(
-                        builder: (context, obatProvider, child) {
-                          // Gunakan ListView.builder di sini
-                          return ListView.builder(
-                            itemCount: obatProvider.obats.length,
-                            itemBuilder: (context, index) {
-                              final obat = obatProvider.obats[index];
-                              return ItemWidget(
-                                namaObat: obat.namaObat,
-                                deskripsiObat: obat.deskripsiObat,
-                                jumlahObat: obat.jumlahObat,
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )),
+          ),
+        ),
       ),
     );
   }
@@ -94,7 +87,7 @@ class ItemWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(12, 24, 12, 24),
+                padding: const EdgeInsets.fromLTRB(12, 24, 12, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +106,7 @@ class ItemWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 jumlahObat.toString(),
                 style: Theme.of(context).textTheme.titleLarge,
@@ -145,7 +138,7 @@ class AppBarCard extends StatelessWidget {
       child: SizedBox(
         height: 58,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
+          padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
           child: Row(
             children: [
               Text(
@@ -159,7 +152,7 @@ class AppBarCard extends StatelessWidget {
 
                   Navigator.pushReplacementNamed(context, '/');
                 },
-                icon: Icon(Icons.logout),
+                icon: const Icon(Icons.logout),
               ),
             ],
           ),
@@ -183,7 +176,7 @@ class MyButton extends StatelessWidget {
           backgroundColor: MaterialTheme.lightScheme().primaryContainer,
           textStyle:
               TextStyle(color: MaterialTheme.lightScheme().onPrimaryContainer),
-          minimumSize: Size(120, 38),
+          minimumSize: const Size(120, 38),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
       child: Text(
