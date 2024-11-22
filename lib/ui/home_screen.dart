@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pampotek/data/repositories/auth_repository_impl.dart';
 import 'package:flutter_pampotek/data/models/data_layer.dart';
+import 'package:flutter_pampotek/di.dart';
+import 'package:flutter_pampotek/ui/providers/obat_provider.dart';
+import 'package:provider/provider.dart';
 import '../util.dart';
 import '../theme.dart';
 import 'package:flutter_pampotek/theme.dart';
@@ -13,11 +17,8 @@ class HomeScreen extends StatelessWidget {
     TextTheme textTheme = createTextTheme(context, "Poppins", "Poppins");
     MaterialTheme theme = MaterialTheme(textTheme);
 
-    List<Obat> items = List<Obat>.generate(
-      20,
-      (i) => Obat(
-          namaObat: "Panadol", deskripsiObat: "Deskripsi Obat", jumlahObat: 20),
-    );
+    final obatProvider = Provider.of<ObatProvider>(context);
+    obatProvider.fetchObat();
 
     return Container(
       color: MaterialTheme.lightScheme().surface,
@@ -45,42 +46,17 @@ class HomeScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
                       child: ListView.builder(
-                        itemCount: items.length,
+                        itemCount: obatProvider.obats.length,
                         itemBuilder: (context, index) {
+                          final obat = obatProvider.obats[index];
                           return ItemWidget(
-                              namaObat: items[index].namaObat,
-                              deskripsiObat: items[index].deskripsiObat,
-                              jumlahObat: items[index].jumlahObat);
+                              namaObat: obat.namaObat,
+                              deskripsiObat: obat.deskripsiObat,
+                              jumlahObat: obat.jumlahObat);
                         },
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(12, 2, 12, 2),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        MyHeader(text: "Transaksi"),
-                        MyButton(text: "Button", onPressed: () => {})
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 330,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                      child: ListView.builder(
-                        itemCount: items.length,
-                        itemBuilder: (context, index) {
-                          return ItemWidget(
-                              namaObat: items[index].namaObat,
-                              deskripsiObat: items[index].deskripsiObat,
-                              jumlahObat: items[index].jumlahObat);
-                        },
-                      ),
-                    ),
-                  )
                 ],
               ),
             )),
@@ -99,7 +75,7 @@ class ItemWidget extends StatelessWidget {
 
   final String namaObat;
   final String deskripsiObat;
-  final int jumlahObat;
+  final String jumlahObat;
 
   @override
   Widget build(BuildContext context) {
@@ -163,10 +139,22 @@ class AppBarCard extends StatelessWidget {
         height: 58,
         child: Padding(
           padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
-          child: Text(
-            "Selamat datang, $username!",
-            style: TextStyle(
-                color: MaterialTheme.lightScheme().onTertiaryContainer),
+          child: Row(
+            children: [
+              Text(
+                "Selamat datang, $username!",
+                style: TextStyle(
+                    color: MaterialTheme.lightScheme().onTertiaryContainer),
+              ),
+              IconButton(
+                onPressed: () async {
+                  await locator<AuthRepositoryImpl>().logoutUser();
+                  
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+                icon: Icon(Icons.logout),
+              ),
+            ],
           ),
         ),
       ),

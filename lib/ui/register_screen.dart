@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pampotek/data/controller/base_controller.dart';
+import 'package:flutter_pampotek/data/repositories/base_repository_impl.dart';
 import 'package:flutter_pampotek/di.dart';
 import 'package:flutter_pampotek/theme.dart';
 import 'package:flutter_pampotek/ui/home_screen.dart';
@@ -24,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String email = emailController.text;
     String password = passwordController.text;
 
-    locator<AuthController>().registerUser(context, email, password);
+    locator<AuthRepositoryImpl>().registerUser(context, email, password);
   }
 
   void toLoginScreen() {

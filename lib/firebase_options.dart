@@ -57,6 +57,8 @@ class DefaultFirebaseOptions {
     appId: '1:668845308710:android:24a91a668e50836e611fe7',
     messagingSenderId: '668845308710',
     projectId: 'flutter-pampotek',
+    databaseURL: 'https://flutter-pampotek-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'flutter-pampotek.firebasestorage.app',
   );
+
 }

@@ -1,1 +1,1 @@
-export 'model_obat.dart';
+export 'obat_model.dart';

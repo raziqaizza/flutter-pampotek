@@ -1,9 +1,11 @@
-import 'package:flutter_pampotek/data/controller/base_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_pampotek/data/repositories/base_repository_impl.dart';
 import 'package:get_it/get_it.dart';
 
 final locator = GetIt.instance;
 
 void setup() {
-  locator.registerSingleton<AuthController>(AuthController());
-  locator.registerSingleton<Obatcontroller>(Obatcontroller());
+  locator.registerSingleton<AuthRepositoryImpl>(AuthRepositoryImpl(FirebaseAuth.instance));
+  locator.registerSingleton<ObatRepositoryImpl>(ObatRepositoryImpl(FirebaseDatabase.instance.ref()));
 }

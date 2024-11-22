@@ -4,12 +4,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pampotek/domain/repositories/auth_repository.dart';
 import 'package:flutter_pampotek/ui/home_screen.dart';
 import 'package:flutter_pampotek/ui/login_screen.dart';
 
-class AuthController {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class AuthRepositoryImpl implements AuthRepository{
+  final FirebaseAuth _auth;
 
+  AuthRepositoryImpl(this._auth);
+
+
+  @override
   Future<void> registerUser(
     BuildContext context,
     String email,
@@ -24,7 +29,6 @@ class AuthController {
         });
 
     try {
-      
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -46,6 +50,7 @@ class AuthController {
     }
   }
 
+  @override
   Future<void> loginUser(
     BuildContext context,
     String email,
@@ -83,5 +88,15 @@ class AuthController {
       Navigator.pop(context);
     }
   }
-}
 
+  @override
+  Future<void> logoutUser() async {
+    await _auth.signOut();
+  }
+
+  @override
+  String? userSession() {
+    final user = _auth.currentUser?.uid;
+    return user;
+  }
+}
