@@ -14,6 +14,10 @@ class HomeScreen extends StatelessWidget {
       Provider.of<ObatProvider>(context, listen: false).fetchObat();
     });
 
+    void toAddObatScreen() {
+      Navigator.pushNamed(context, "/addObat");
+    }
+
     return Container(
       color: MaterialTheme.lightScheme().surface,
       child: SafeArea(
@@ -31,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const MyHeader(text: "Daftar Obat"),
-                      MyButton(text: "Button", onPressed: () => {})
+                      MyButton(text: "Tambah", onPressed: toAddObatScreen)
                     ],
                   ),
                 ),
@@ -138,8 +142,9 @@ class AppBarCard extends StatelessWidget {
       child: SizedBox(
         height: 58,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
+          padding: const EdgeInsets.fromLTRB(12, 5, 5, 12),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 "Selamat datang, $username!",
@@ -149,7 +154,6 @@ class AppBarCard extends StatelessWidget {
               IconButton(
                 onPressed: () async {
                   await locator<AuthRepositoryImpl>().logoutUser();
-
                   Navigator.pushReplacementNamed(context, '/');
                 },
                 icon: const Icon(Icons.logout),
@@ -179,9 +183,18 @@ class MyButton extends StatelessWidget {
           minimumSize: const Size(120, 38),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.titleMedium,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          const Icon(Icons.add)
+        ],
       ),
     );
   }

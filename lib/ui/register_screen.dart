@@ -30,34 +30,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Container(
-      decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),
-      padding: const EdgeInsets.all(20),
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          const MyHeaderText(text: "Daftarkan akun kamu."),
-          MyTextForm(
-            hint: "Nama",
-            controller: namaController,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),
+          padding: const EdgeInsets.all(20),
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              const MyHeaderText(text: "Daftarkan akun kamu."),
+              MyTextForm(
+                hint: "Nama",
+                controller: namaController,
+              ),
+              MyTextForm(
+                hint: "Email Address",
+                controller: emailController,
+              ),
+              MyTextForm(
+                hint: "Password",
+                controller: passwordController,
+              ),
+              MyButton(
+                text: "Daftar",
+                onPressed: handleRegister,
+              ),
+              MyTextButton(text: "Sudah punya akun?", onPressed: toLoginScreen),
+            ],
           ),
-          MyTextForm(
-            hint: "Email Address",
-            controller: emailController,
-          ),
-          MyTextForm(
-            hint: "Password",
-            controller: passwordController,
-          ),
-          MyButton(
-            text: "Daftar",
-            onPressed: handleRegister,
-          ),
-          MyTextButton(text: "Sudah punya akun?", onPressed: toLoginScreen),
-        ],
+        ),
       ),
-    )));
+    );
   }
 }
 
