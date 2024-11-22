@@ -17,8 +17,9 @@ class HomeScreen extends StatelessWidget {
     TextTheme textTheme = createTextTheme(context, "Poppins", "Poppins");
     MaterialTheme theme = MaterialTheme(textTheme);
 
-    final obatProvider = Provider.of<ObatProvider>(context);
-    obatProvider.fetchObat();
+    Future.microtask(() {
+      Provider.of<ObatProvider>(context, listen: false).fetchObat();
+    });
 
     return Container(
       color: MaterialTheme.lightScheme().surface,
@@ -45,14 +46,20 @@ class HomeScreen extends StatelessWidget {
                     height: 330,
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                      child: ListView.builder(
-                        itemCount: obatProvider.obats.length,
-                        itemBuilder: (context, index) {
-                          final obat = obatProvider.obats[index];
-                          return ItemWidget(
-                              namaObat: obat.namaObat,
-                              deskripsiObat: obat.deskripsiObat,
-                              jumlahObat: obat.jumlahObat);
+                      child: Consumer<ObatProvider>(
+                        builder: (context, obatProvider, child) {
+                          // Gunakan ListView.builder di sini
+                          return ListView.builder(
+                            itemCount: obatProvider.obats.length,
+                            itemBuilder: (context, index) {
+                              final obat = obatProvider.obats[index];
+                              return ItemWidget(
+                                namaObat: obat.namaObat,
+                                deskripsiObat: obat.deskripsiObat,
+                                jumlahObat: obat.jumlahObat,
+                              );
+                            },
+                          );
                         },
                       ),
                     ),
@@ -149,7 +156,7 @@ class AppBarCard extends StatelessWidget {
               IconButton(
                 onPressed: () async {
                   await locator<AuthRepositoryImpl>().logoutUser();
-                  
+
                   Navigator.pushReplacementNamed(context, '/');
                 },
                 icon: Icon(Icons.logout),
