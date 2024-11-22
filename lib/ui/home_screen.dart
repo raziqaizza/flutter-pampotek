@@ -75,7 +75,7 @@ class ItemWidget extends StatelessWidget {
 
   final String namaObat;
   final String deskripsiObat;
-  final String jumlahObat;
+  final int jumlahObat;
 
   @override
   Widget build(BuildContext context) {

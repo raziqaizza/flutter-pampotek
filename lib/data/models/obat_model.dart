@@ -4,7 +4,7 @@ class ObatModel {
   final String id;
   final String namaObat;
   final String deskripsiObat;
-  final String jumlahObat;
+  final int jumlahObat;
 
   ObatModel(
       {required this.id,
