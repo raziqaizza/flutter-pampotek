@@ -115,7 +115,13 @@ class ItemWidget extends StatelessWidget {
                 jumlahObat.toString(),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-            )
+            ),
+            IconButton(
+                onPressed: () => {},
+                icon: Icon(
+                  Icons.delete,
+                  color: MaterialTheme.lightScheme().error,
+                ))
           ],
         ),
       ),
