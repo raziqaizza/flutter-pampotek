@@ -50,6 +50,7 @@ class HomeScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final obat = obatProvider.obats[index];
                             return ItemWidget(
+                              id: obat.id,
                               namaObat: obat.namaObat,
                               deskripsiObat: obat.deskripsiObat,
                               jumlahObat: obat.jumlahObat,
@@ -72,14 +73,16 @@ class HomeScreen extends StatelessWidget {
 class ItemWidget extends StatelessWidget {
   const ItemWidget({
     super.key,
+    required this.id,
     required this.namaObat,
     required this.deskripsiObat,
     required this.jumlahObat,
   });
 
+  final String id;
   final String namaObat;
   final String deskripsiObat;
-  final int jumlahObat;
+  final int jumlahObat;  
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +120,9 @@ class ItemWidget extends StatelessWidget {
               ),
             ),
             IconButton(
-                onPressed: () => {},
+                onPressed: () async {
+                  await Provider.of<ObatProvider>(context, listen: false).deleteObat(id);
+                },
                 icon: Icon(
                   Icons.delete,
                   color: MaterialTheme.lightScheme().error,

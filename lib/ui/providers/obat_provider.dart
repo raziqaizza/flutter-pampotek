@@ -29,6 +29,7 @@ class ObatProvider extends ChangeNotifier {
   }
 
   Future<void> deleteObat(String id) async {
+    print("hapus oi");
     await deleteObatUseCase(id); // Panggil use case deleteNote
     notifyListeners();
   }
