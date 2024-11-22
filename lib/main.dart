@@ -7,6 +7,7 @@ import 'package:flutter_pampotek/di.dart';
 import 'package:flutter_pampotek/domain/usecases/add_obat.dart';
 import 'package:flutter_pampotek/domain/usecases/delete_obat.dart';
 import 'package:flutter_pampotek/domain/usecases/get_obat.dart';
+import 'package:flutter_pampotek/domain/usecases/update_obat.dart';
 import 'package:flutter_pampotek/firebase_options.dart';
 import 'package:flutter_pampotek/ui/add_obat_screen.dart';
 import 'package:flutter_pampotek/ui/edit_obat_screen.dart';
@@ -35,6 +36,7 @@ void main() async {
             addObatUseCase: AddObat(locator.get<ObatRepositoryImpl>()),
             getObatUseCase: GetObat(locator.get<ObatRepositoryImpl>()),
             deleteObatUseCase: DeleteObat(locator.get<ObatRepositoryImpl>()),
+            editObatUseCase: EditObat(locator.get<ObatRepositoryImpl>()),
           ),
         ),
       ],

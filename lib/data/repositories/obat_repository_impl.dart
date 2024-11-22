@@ -91,13 +91,17 @@ class ObatRepositoryImpl implements ObatRepository {
       int nextId = 1;
       if (snapshot.exists) {
         final data = snapshot.value as List<dynamic>;
-        
-        final validIds = data.asMap().entries
+
+        final validIds = data
+            .asMap()
+            .entries
             .where((entry) => entry.value != null)
             .map((entry) => entry.key)
             .toList();
 
-        nextId = validIds.isNotEmpty ? validIds.reduce((a, b) => a > b ? a : b) + 1 : 1;
+        nextId = validIds.isNotEmpty
+            ? validIds.reduce((a, b) => a > b ? a : b) + 1
+            : 1;
       }
 
       await _getObatRef().child(nextId.toString()).set({
@@ -130,7 +134,14 @@ class ObatRepositoryImpl implements ObatRepository {
       if (uid == null) {
         throw Exception('Pengguna belum login');
       }
-      db.update(ObatModel.fromEntity(obat).toJson());
+
+      if (obat.id.isEmpty) {
+        throw Exception('ID obat tidak ditemukan');
+      }
+
+      final model = ObatModel.fromEntity(obat);
+
+      await _getObatRef().child(obat.id).update(model.toJson());
     } catch (e) {
       rethrow;
     }

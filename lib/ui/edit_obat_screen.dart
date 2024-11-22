@@ -20,13 +20,14 @@ class _EditObatScreenState extends State<EditObatScreen> {
     Navigator.pop(context);
   }
 
-  void handleSubmit() async {
+  void handleSubmit(String id) async {
     String namaObat = namaObatController.text;
     String deskripsiObat = deskripsiObatController.text;
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
 
-    await Provider.of<ObatProvider>(context, listen: false).addObat(ObatEntitiy(
-        id: "",
+    await Provider.of<ObatProvider>(context, listen: false).editObat
+    (ObatEntitiy(
+        id: id,
         namaObat: namaObat,
         deskripsiObat: deskripsiObat,
         jumlahObat: jumlahObat));
@@ -64,7 +65,7 @@ class _EditObatScreenState extends State<EditObatScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 MyCancelButton(text: "Batal", onPressed: toHomeScreen),
-                MyButton(text: "Simpan", onPressed: handleSubmit)
+                MyButton(text: "Simpan", onPressed: () => handleSubmit(obat.id))
               ],
             )
           ],
@@ -113,7 +114,7 @@ class MyButton extends StatelessWidget {
   const MyButton({super.key, required this.text, required this.onPressed});
 
   final String text;
-  final Function()? onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
