@@ -12,6 +12,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.microtask(() {
+      print('microtask home screen');
       Provider.of<ObatProvider>(context, listen: false).fetchObat();
     });
 
@@ -212,7 +213,7 @@ class MyButton extends StatelessWidget {
             text,
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
           const Icon(Icons.add)

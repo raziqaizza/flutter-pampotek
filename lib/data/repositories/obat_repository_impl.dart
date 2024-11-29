@@ -41,7 +41,35 @@ class ObatRepositoryImpl implements ObatRepository {
           return [];
         }
 
+        if (event.snapshot.value is Map) {
+          print('Data is Map');
+
+          final data = event.snapshot.value as Map<dynamic, dynamic>;
+
+          return data.entries
+              .map((entry) {
+                final key = entry.key as String;
+                final obatJson = entry.value;
+
+                if (obatJson == null) return null;
+
+                final obatMap = Map<String, dynamic>.from(obatJson);
+
+                // Membuat ObatEntity
+                final entity =
+                    ObatModel.fromJson({...obatMap, "id": key}).toEntity();
+
+                // Debug: Print entity
+                print("Entity: ${entity.id}");
+
+                return entity;
+              })
+              .whereType<ObatEntitiy>()
+              .toList();
+        }
+
         if (event.snapshot.value is List<dynamic>) {
+          print('Data is List');
           final data = event.snapshot.value as List<dynamic>;
 
           return data
@@ -90,14 +118,11 @@ class ObatRepositoryImpl implements ObatRepository {
 
       int nextId = 1;
       if (snapshot.exists) {
-        final data = snapshot.value as List<dynamic>;
+        final data = snapshot.value as Map<dynamic, dynamic>;
 
-        final validIds = data
-            .asMap()
-            .entries
-            .where((entry) => entry.value != null)
-            .map((entry) => entry.key)
-            .toList();
+        // Ambil semua keys yang ada di Map dan tentukan ID berikutnya
+        final validIds =
+            data.keys.map((key) => int.tryParse(key.toString()) ?? 0).toList();
 
         nextId = validIds.isNotEmpty
             ? validIds.reduce((a, b) => a > b ? a : b) + 1

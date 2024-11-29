@@ -21,6 +21,7 @@ class ObatProvider extends ChangeNotifier {
   });
 
   void fetchObat() {
+    print('obat provider');
     getObatUseCase().listen((data) {
       obats = data;
       notifyListeners();

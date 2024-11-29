@@ -28,8 +28,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       // Kembali ke halaman login setelah berhasil
-      Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, "/login");
+      Navigator.popAndPushNamed(context, "/login");
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Registration failed: $e')),
@@ -59,7 +58,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       // Navigasi ke halaman Home setelah login berhasil
-      Navigator.pushReplacementNamed(context, "/home");
+      Navigator.popAndPushNamed(context, "/home");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login successful')),
       );
