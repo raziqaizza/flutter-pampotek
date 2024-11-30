@@ -14,9 +14,7 @@ class HomeScreen extends StatelessWidget {
     final obatProvider = Provider.of<ObatProvider>(context, listen: false);
     final obats = obatProvider.obats;
 
-    Future.microtask(() {
-      obatProvider.fetchObat();
-    });
+    obatProvider.fetchObat();
 
     void toAddObatScreen() {
       Navigator.pushNamed(context, "/addObat");

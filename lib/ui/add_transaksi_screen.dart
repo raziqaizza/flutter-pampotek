@@ -1,7 +1,9 @@
 import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
+import 'package:flutter_pampotek/domain/entities/transaksi_entity.dart';
 import 'package:flutter_pampotek/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/ui/providers/obat_provider.dart';
+import 'package:flutter_pampotek/ui/providers/transaksi_provider.dart';
 import 'package:provider/provider.dart';
 
 class AddTransaksiScreen extends StatefulWidget {
@@ -16,13 +18,25 @@ List<String> list = <String>[];
 class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
   final TextEditingController jumlahController = TextEditingController();
   final String stok = "";
+  String selectedNamaObat = '';
 
   void toHomeScreen() {
     Navigator.pop(context);
   }
 
   void handleSubmit() async {
-    Navigator.pop(context);
+    print("add transaksi");
+    String namaObat = selectedNamaObat;
+    int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
+
+    await Provider.of<TransaksiProvider>(context, listen: false)
+        .addTransaksi(TransaksiEntity(
+      id: "",
+      namaObat: namaObat,
+      jumlahObat: jumlahObat,
+      hargaObat: 0,
+      tanggal: DateTime.now(),
+    ));
   }
 
   @override
@@ -40,21 +54,28 @@ class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
         decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),
         padding: const EdgeInsets.all(20),
         alignment: Alignment.center,
-        child: Column(
-          children: [
-            DropDownButton(
-              obats: obats,
-            ),
-            MyTextForm(hint: "Jumlah", controller: jumlahController),
-            const Spacer(flex: 1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MyCancelButton(text: "Batal", onPressed: toHomeScreen),
-                MyButton(text: "Simpan", onPressed: handleSubmit)
-              ],
-            )
-          ],
+        child: SafeArea(
+          child: Column(
+            children: [
+              DropDownButton(
+                obats: obats,
+                onValueChanged: (value) {
+                  setState(() {
+                    selectedNamaObat = value; // Menyimpan nama obat yang dipilih
+                  });
+                },
+              ),
+              MyTextForm(hint: "Jumlah", controller: jumlahController),
+              const Spacer(flex: 1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MyCancelButton(text: "Batal", onPressed: toHomeScreen),
+                  MyButton(text: "Simpan", onPressed: handleSubmit)
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -149,9 +170,11 @@ class MyCancelButton extends StatelessWidget {
 }
 
 class DropDownButton extends StatefulWidget {
-  const DropDownButton({super.key, required this.obats});
+  const DropDownButton(
+      {super.key, required this.obats, required this.onValueChanged});
 
   final List<ObatEntitiy> obats;
+  final ValueChanged<String> onValueChanged;
 
   @override
   State<DropDownButton> createState() => _DropDownButtonState();
@@ -165,7 +188,7 @@ class _DropDownButtonState extends State<DropDownButton> {
   void initState() {
     super.initState();
     dropdownValue = widget.obats.first.namaObat;
-    currentStock = widget.obats.first.jumlahObat;
+    // currentStock = widget.obats.first.jumlahObat;
   }
 
   @override
@@ -178,8 +201,8 @@ class _DropDownButtonState extends State<DropDownButton> {
         ),
         const SizedBox(height: 10),
         DropdownMenu<String>(
-          width: double.infinity,
-          initialSelection: list.first,
+          width: 300,
+          initialSelection: "",
           onSelected: (String? value) {
             setState(() {
               dropdownValue = value!;
@@ -187,6 +210,8 @@ class _DropDownButtonState extends State<DropDownButton> {
                   .firstWhere((obat) => obat.namaObat == value)
                   .jumlahObat;
             });
+
+            widget.onValueChanged(dropdownValue);
           },
           dropdownMenuEntries:
               list.map<DropdownMenuEntry<String>>((String value) {
