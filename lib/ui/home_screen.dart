@@ -11,9 +11,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final obatProvider = Provider.of<ObatProvider>(context, listen: false);
+    final obats = obatProvider.obats;
+
     Future.microtask(() {
-      print('microtask home screen');
-      Provider.of<ObatProvider>(context, listen: false).fetchObat();
+      obatProvider.fetchObat();
     });
 
     void toAddObatScreen() {
@@ -22,6 +24,11 @@ class HomeScreen extends StatelessWidget {
 
     void toEditObatScreen(ObatEntitiy obat) {
       Navigator.pushNamed(context, "/editObat", arguments: obat);
+    }
+
+    void toAddTransaksiScreen(List<ObatEntitiy> obats) {
+      print("to transaksi");
+      Navigator.pushNamed(context, "/addTransaksi", arguments: obats);
     }
 
     return Container(
@@ -57,6 +64,41 @@ class HomeScreen extends StatelessWidget {
                             final obat = obatProvider.obats[index];
                             return ItemWidget(
                               onTap: () => toEditObatScreen(obat),
+                              id: obat.id,
+                              namaObat: obat.namaObat,
+                              deskripsiObat: obat.deskripsiObat,
+                              jumlahObat: obat.jumlahObat,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 2, 12, 2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const MyHeader(text: "Transaksi"),
+                      MyTransaksiButton(
+                        text: "Tambah",
+                        onPressed: () => toAddTransaksiScreen(obats),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 380,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                    child: Consumer<ObatProvider>(
+                      builder: (context, obatProvider, child) {
+                        return ListView.builder(
+                          itemCount: obatProvider.obats.length,
+                          itemBuilder: (context, index) {
+                            final obat = obatProvider.obats[index];
+                            return ItemWidget(
                               id: obat.id,
                               namaObat: obat.namaObat,
                               deskripsiObat: obat.deskripsiObat,
@@ -190,10 +232,44 @@ class AppBarCard extends StatelessWidget {
 }
 
 class MyButton extends StatelessWidget {
-  const MyButton({super.key, required this.text, required this.onPressed});
+  const MyButton({super.key, required this.text, this.onPressed});
 
   final String text;
   final Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+          backgroundColor: MaterialTheme.lightScheme().primaryContainer,
+          textStyle:
+              TextStyle(color: MaterialTheme.lightScheme().onPrimaryContainer),
+          minimumSize: const Size(120, 38),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          const Icon(Icons.add)
+        ],
+      ),
+    );
+  }
+}
+
+class MyTransaksiButton extends StatelessWidget {
+  const MyTransaksiButton({super.key, required this.text, this.onPressed});
+
+  final String text;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
