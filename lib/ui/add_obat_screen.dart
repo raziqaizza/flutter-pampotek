@@ -15,6 +15,7 @@ class _AddObatScreenState extends State<AddObatScreen> {
   final TextEditingController namaObatController = TextEditingController();
   final TextEditingController deskripsiObatController = TextEditingController();
   final TextEditingController jumlahController = TextEditingController();
+  final TextEditingController hargaController = TextEditingController();
 
   void toHomeScreen() {
     Navigator.pop(context);
@@ -22,17 +23,16 @@ class _AddObatScreenState extends State<AddObatScreen> {
 
   void handleSubmit() async {
     String namaObat = namaObatController.text;
+    int hargaObat = int.tryParse(hargaController.text.trim()) ?? 0;
     String deskripsiObat = deskripsiObatController.text;
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
-    //TODO input harga obat
 
     await Provider.of<ObatProvider>(context, listen: false).addObat(ObatEntitiy(
         id: "",
         namaObat: namaObat,
         deskripsiObat: deskripsiObat,
         jumlahObat: jumlahObat,
-        //TODO from input
-        hargaObat: 0));
+        hargaObat: hargaObat));
 
     Navigator.pop(context);
   }
@@ -52,11 +52,10 @@ class _AddObatScreenState extends State<AddObatScreen> {
         child: Column(
           children: [
             MyTextForm(hint: "Nama Obat", controller: namaObatController),
+            MyTextForm(hint: "Harga", controller: hargaController),
             MyTextForm(hint: "Deskripsi", controller: deskripsiObatController),
             MyTextForm(hint: "Jumlah", controller: jumlahController),
-            Spacer(
-              flex: 1,
-            ),
+            const Spacer(flex: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -81,7 +80,7 @@ class MyTextForm extends StatelessWidget {
   Widget build(BuildContext context) {
     TextInputType keyboardType = TextInputType.text;
 
-    if (hint == "Jumlah") {
+    if (hint == "Jumlah" || hint == "Harga") {
       keyboardType = TextInputType.number;
     } else {
       keyboardType = TextInputType.text;

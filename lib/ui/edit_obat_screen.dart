@@ -15,6 +15,8 @@ class _EditObatScreenState extends State<EditObatScreen> {
   final TextEditingController namaObatController = TextEditingController();
   final TextEditingController deskripsiObatController = TextEditingController();
   final TextEditingController jumlahController = TextEditingController();
+  final TextEditingController hargaController = TextEditingController();
+  final TextEditingController tambahJumlahController = TextEditingController();
 
   void toHomeScreen() {
     Navigator.pop(context);
@@ -24,16 +26,15 @@ class _EditObatScreenState extends State<EditObatScreen> {
     String namaObat = namaObatController.text;
     String deskripsiObat = deskripsiObatController.text;
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
-    //TODO input edit harga obat
+    int hargaObat = int.tryParse(hargaController.text.trim()) ?? 0;
 
-    await Provider.of<ObatProvider>(context, listen: false).editObat
-    (ObatEntitiy(
-        id: id,
-        namaObat: namaObat,
-        deskripsiObat: deskripsiObat,
-        jumlahObat: jumlahObat,
-        //TODO from harga obat
-        hargaObat: 0));
+    await Provider.of<ObatProvider>(context, listen: false).editObat(
+        ObatEntitiy(
+            id: id,
+            namaObat: namaObat,
+            deskripsiObat: deskripsiObat,
+            jumlahObat: jumlahObat,
+            hargaObat: hargaObat));
 
     Navigator.pop(context);
   }
@@ -47,31 +48,36 @@ class _EditObatScreenState extends State<EditObatScreen> {
     jumlahController.text = obat.jumlahObat.toString();
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text("Edit obat"),
         leading:
             IconButton(onPressed: toHomeScreen, icon: Icon(Icons.arrow_back)),
       ),
-      body: Container(
-        decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),
-        padding: const EdgeInsets.all(20),
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            MyTextForm(hint: "Nama Obat", controller: namaObatController),
-            MyTextForm(hint: "Deskripsi", controller: deskripsiObatController),
-            MyTextForm(hint: "Jumlah", controller: jumlahController),
-            Spacer(
-              flex: 1,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MyCancelButton(text: "Batal", onPressed: toHomeScreen),
-                MyButton(text: "Simpan", onPressed: () => handleSubmit(obat.id))
-              ],
-            )
-          ],
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),
+          padding: const EdgeInsets.all(20),
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              MyTextForm(hint: "Nama Obat", controller: namaObatController),
+              MyTextForm(hint: "Harga", controller: jumlahController),
+              MyTextForm(
+                  hint: "Deskripsi", controller: deskripsiObatController),
+              MyTextForm(hint: "Jumlah", controller: jumlahController),
+              MyTextForm(hint: "Tambah", controller: tambahJumlahController),
+              const Spacer(flex: 1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MyCancelButton(text: "Batal", onPressed: toHomeScreen),
+                  MyButton(
+                      text: "Simpan", onPressed: () => handleSubmit(obat.id))
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -87,16 +93,24 @@ class MyTextForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextInputType keyboardType = TextInputType.text;
+    bool isEnabled = true;
 
-    if (hint == "Jumlah") {
+    if (hint == "Harga") {
       keyboardType = TextInputType.number;
     } else {
       keyboardType = TextInputType.text;
     }
 
+    if (hint == "Jumlah") {
+      isEnabled = false;
+    } else {
+      isEnabled = true;
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: TextFormField(
+        enabled: isEnabled,
         keyboardType: keyboardType,
         controller: controller,
         style: TextStyle(color: MaterialTheme.lightScheme().onSurfaceVariant),

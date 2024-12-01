@@ -3,6 +3,7 @@ import 'package:flutter_pampotek/data/repositories/auth_repository_impl.dart';
 import 'package:flutter_pampotek/di.dart';
 import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
 import 'package:flutter_pampotek/ui/providers/obat_provider.dart';
+import 'package:flutter_pampotek/ui/providers/transaksi_provider.dart';
 import 'package:provider/provider.dart';
 import '../theme.dart';
 
@@ -12,9 +13,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final obatProvider = Provider.of<ObatProvider>(context, listen: false);
-    final obats = obatProvider.obats;
+    final transaksiProvider =
+        Provider.of<TransaksiProvider>(context, listen: false);
 
     obatProvider.fetchObat();
+    transaksiProvider.fetchTransaksi();
 
     void toAddObatScreen() {
       Navigator.pushNamed(context, "/addObat");
@@ -60,10 +63,11 @@ class HomeScreen extends StatelessWidget {
                           itemCount: obatProvider.obats.length,
                           itemBuilder: (context, index) {
                             final obat = obatProvider.obats[index];
-                            return ItemWidget(
+                            return ItemWidgetObat(
                               onTap: () => toEditObatScreen(obat),
                               id: obat.id,
                               namaObat: obat.namaObat,
+                              hargaObat: "Rp. ${obat.hargaObat}",
                               deskripsiObat: obat.deskripsiObat,
                               jumlahObat: obat.jumlahObat,
                             );
@@ -81,7 +85,8 @@ class HomeScreen extends StatelessWidget {
                       const MyHeader(text: "Transaksi"),
                       MyTransaksiButton(
                         text: "Tambah",
-                        onPressed: () => toAddTransaksiScreen(obats),
+                        onPressed: () =>
+                            toAddTransaksiScreen(obatProvider.obats),
                       )
                     ],
                   ),
@@ -90,17 +95,18 @@ class HomeScreen extends StatelessWidget {
                   height: 380,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                    child: Consumer<ObatProvider>(
-                      builder: (context, obatProvider, child) {
+                    child: Consumer<TransaksiProvider>(
+                      builder: (context, transaksiProvider, child) {
                         return ListView.builder(
-                          itemCount: obatProvider.obats.length,
+                          itemCount: transaksiProvider.transaksi.length,
                           itemBuilder: (context, index) {
-                            final obat = obatProvider.obats[index];
-                            return ItemWidget(
-                              id: obat.id,
-                              namaObat: obat.namaObat,
-                              deskripsiObat: obat.deskripsiObat,
-                              jumlahObat: obat.jumlahObat,
+                            final transaksi =
+                                transaksiProvider.transaksi[index];
+                            return ItemWidgetTransaksi(
+                              id: transaksi.id,
+                              namaObat: transaksi.namaObat,
+                              hargaObat: "Rp. ${transaksi.hargaObat}",
+                              jumlahObat: transaksi.jumlahObat,
                             );
                           },
                         );
@@ -117,20 +123,21 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class ItemWidget extends StatelessWidget {
-  const ItemWidget(
+class ItemWidgetObat extends StatelessWidget {
+  const ItemWidgetObat(
       {super.key,
       required this.id,
       required this.namaObat,
       required this.deskripsiObat,
       required this.jumlahObat,
-      //TODO harga obat
+      required this.hargaObat,
       this.onTap});
 
   final String id;
   final String namaObat;
   final String deskripsiObat;
   final int jumlahObat;
+  final String hargaObat;
   final VoidCallback? onTap;
 
   @override
@@ -145,7 +152,7 @@ class ItemWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 24, 12, 24),
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -153,6 +160,11 @@ class ItemWidget extends StatelessWidget {
                       Text(
                         namaObat,
                         style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Text(
+                        hargaObat.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       Text(
                         deskripsiObat,
@@ -171,14 +183,83 @@ class ItemWidget extends StatelessWidget {
                 ),
               ),
               IconButton(
-                  onPressed: () async {
-                    await Provider.of<ObatProvider>(context, listen: false)
-                        .deleteObat(id);
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    color: MaterialTheme.lightScheme().error,
-                  ))
+                onPressed: () async {
+                  await Provider.of<ObatProvider>(context, listen: false)
+                      .deleteObat(id);
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: MaterialTheme.lightScheme().error,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ItemWidgetTransaksi extends StatelessWidget {
+  const ItemWidgetTransaksi({
+    super.key,
+    required this.id,
+    required this.namaObat,
+    required this.jumlahObat,
+    required this.hargaObat,
+  });
+
+  final String id;
+  final String namaObat;
+  final int jumlahObat;
+  final String hargaObat;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Card(
+        color: MaterialTheme.lightScheme().surfaceContainer,
+        child: SizedBox(
+          height: 100,
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        namaObat,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Text(
+                        hargaObat.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  jumlahObat.toString(),
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              IconButton(
+                onPressed: () async {
+                  await Provider.of<TransaksiProvider>(context, listen: false)
+                      .deleteTransaksi(id);
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: MaterialTheme.lightScheme().error,
+                ),
+              )
             ],
           ),
         ),

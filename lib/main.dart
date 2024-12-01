@@ -46,11 +46,14 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(
-            create: (_) => TransaksiProvider(
-                addTransaksiUseCase: AddTransaksi(locator.get<TransaksiRepositoryImpl>()),
-                deleteTransaksiUseCase: DeleteTransaksi(locator.get<TransaksiRepositoryImpl>()),
-                getTransaksiUseCase: GetTransaksi(locator.get<TransaksiRepositoryImpl>()),
-              ),
+          create: (_) => TransaksiProvider(
+            addTransaksiUseCase:
+                AddTransaksi(locator.get<TransaksiRepositoryImpl>()),
+            deleteTransaksiUseCase:
+                DeleteTransaksi(locator.get<TransaksiRepositoryImpl>()),
+            getTransaksiUseCase:
+                GetTransaksi(locator.get<TransaksiRepositoryImpl>()),
+          ),
         ),
       ],
       child: const MyApp(),
@@ -74,12 +77,12 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => _getInitialScreen(),
-        '/home': (context) => HomeScreen(),
-        '/login': (context) => LoginScreen(),
-        '/register': (context) => RegisterScreen(),
-        '/addObat': (context) => AddObatScreen(),
-        '/editObat': (context) => EditObatScreen(),
-        '/addTransaksi': (context) => AddTransaksiScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/addObat': (context) => const AddObatScreen(),
+        '/editObat': (context) => const EditObatScreen(),
+        '/addTransaksi': (context) => const AddTransaksiScreen(),
       },
     );
   }
@@ -89,9 +92,9 @@ class MyApp extends StatelessWidget {
     print(user);
 
     if (user != null) {
-      return HomeScreen();
+      return const HomeScreen();
     } else {
-      return LoginScreen();
+      return const LoginScreen();
     }
   }
 }

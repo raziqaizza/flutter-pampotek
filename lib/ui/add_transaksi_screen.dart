@@ -29,14 +29,15 @@ class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
     String namaObat = selectedNamaObat;
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
 
-    await Provider.of<TransaksiProvider>(context, listen: false)
-        .addTransaksi(TransaksiEntity(
-      id: "",
-      namaObat: namaObat,
-      jumlahObat: jumlahObat,
-      hargaObat: 0,
-      tanggal: DateTime.now(),
-    ));
+    await Provider.of<TransaksiProvider>(context, listen: false).addTransaksi(
+      TransaksiEntity(
+        id: "",
+        namaObat: namaObat,
+        jumlahObat: jumlahObat,
+        hargaObat: 0,
+        tanggal: DateTime.now(),
+      ),
+    );
   }
 
   @override
@@ -61,7 +62,8 @@ class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
                 obats: obats,
                 onValueChanged: (value) {
                   setState(() {
-                    selectedNamaObat = value; // Menyimpan nama obat yang dipilih
+                    selectedNamaObat =
+                        value; // Menyimpan nama obat yang dipilih
                   });
                 },
               ),
@@ -210,7 +212,6 @@ class _DropDownButtonState extends State<DropDownButton> {
                   .firstWhere((obat) => obat.namaObat == value)
                   .jumlahObat;
             });
-
             widget.onValueChanged(dropdownValue);
           },
           dropdownMenuEntries:
