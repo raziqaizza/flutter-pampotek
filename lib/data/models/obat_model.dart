@@ -5,12 +5,14 @@ class ObatModel {
   final String namaObat;
   final String deskripsiObat;
   final int jumlahObat;
+  final int hargaObat;
 
   ObatModel(
       {required this.id,
       required this.namaObat,
       required this.deskripsiObat,
-      required this.jumlahObat});
+      required this.jumlahObat,
+      required this.hargaObat});
 
   factory ObatModel.fromJson(Map<String, dynamic> json) {
     return ObatModel(
@@ -18,6 +20,7 @@ class ObatModel {
       namaObat: json['namaObat'],
       deskripsiObat: json['deskripsiObat'],
       jumlahObat: json['jumlahObat'],
+      hargaObat: json['hargaObat']
     );
   }
 
@@ -27,6 +30,7 @@ class ObatModel {
       'namaObat': namaObat,
       'deskripsiObat': deskripsiObat,
       'jumlahObat': jumlahObat,
+      'hargaObat': hargaObat
     };
   }
 
@@ -37,6 +41,7 @@ class ObatModel {
       namaObat: namaObat,
       deskripsiObat: deskripsiObat,
       jumlahObat: jumlahObat,
+      hargaObat: hargaObat,
     );
   }
 
@@ -47,6 +52,7 @@ class ObatModel {
       namaObat: entity.namaObat,
       deskripsiObat: entity.deskripsiObat,
       jumlahObat: entity.jumlahObat,
+      hargaObat: entity.hargaObat,
     );
   }
 }
