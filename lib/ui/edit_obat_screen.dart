@@ -58,24 +58,35 @@ class _EditObatScreenState extends State<EditObatScreen> {
         child: Container(
           decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),
           padding: const EdgeInsets.all(20),
-          alignment: Alignment.center,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MyTextForm(hint: "Nama Obat", controller: namaObatController),
-              MyTextForm(hint: "Harga", controller: jumlahController),
-              MyTextForm(
-                  hint: "Deskripsi", controller: deskripsiObatController),
-              MyTextForm(hint: "Jumlah", controller: jumlahController),
-              MyTextForm(hint: "Tambah", controller: tambahJumlahController),
-              const Spacer(flex: 1),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      MyTextForm(
+                          hint: "Nama Obat", controller: namaObatController),
+                      MyTextForm(hint: "Harga", controller: jumlahController),
+                      MyTextForm(
+                          hint: "Deskripsi",
+                          controller: deskripsiObatController),
+                      MyTextForm(hint: "Jumlah", controller: jumlahController),
+                      MyTextForm(
+                          hint: "Tambah", controller: tambahJumlahController),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20), // Optional spacing before the buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   MyCancelButton(text: "Batal", onPressed: toHomeScreen),
                   MyButton(
-                      text: "Simpan", onPressed: () => handleSubmit(obat.id))
+                      text: "Simpan", onPressed: () => handleSubmit(obat.id)),
                 ],
-              )
+              ),
             ],
           ),
         ),
