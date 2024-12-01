@@ -3,6 +3,12 @@ class ObatEntitiy {
   final String namaObat;
   final String deskripsiObat;
   final int jumlahObat;
+  final int hargaObat;
 
-  ObatEntitiy({required this.id, required this.namaObat,required this.deskripsiObat,required this.jumlahObat});
+  ObatEntitiy(
+      {required this.id,
+      required this.namaObat,
+      required this.deskripsiObat,
+      required this.jumlahObat,
+      required this.hargaObat});
 }

@@ -24,13 +24,16 @@ class _EditObatScreenState extends State<EditObatScreen> {
     String namaObat = namaObatController.text;
     String deskripsiObat = deskripsiObatController.text;
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
+    //TODO input edit harga obat
 
     await Provider.of<ObatProvider>(context, listen: false).editObat
     (ObatEntitiy(
         id: id,
         namaObat: namaObat,
         deskripsiObat: deskripsiObat,
-        jumlahObat: jumlahObat));
+        jumlahObat: jumlahObat,
+        //TODO from harga obat
+        hargaObat: 0));
 
     Navigator.pop(context);
   }

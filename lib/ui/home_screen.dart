@@ -124,6 +124,7 @@ class ItemWidget extends StatelessWidget {
       required this.namaObat,
       required this.deskripsiObat,
       required this.jumlahObat,
+      //TODO harga obat
       this.onTap});
 
   final String id;

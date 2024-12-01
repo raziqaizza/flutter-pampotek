@@ -24,12 +24,15 @@ class _AddObatScreenState extends State<AddObatScreen> {
     String namaObat = namaObatController.text;
     String deskripsiObat = deskripsiObatController.text;
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
+    //TODO input harga obat
 
     await Provider.of<ObatProvider>(context, listen: false).addObat(ObatEntitiy(
         id: "",
         namaObat: namaObat,
         deskripsiObat: deskripsiObat,
-        jumlahObat: jumlahObat));
+        jumlahObat: jumlahObat,
+        //TODO from input
+        hargaObat: 0));
 
     Navigator.pop(context);
   }
