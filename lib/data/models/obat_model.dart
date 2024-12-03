@@ -1,4 +1,4 @@
-import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
+import 'package:flutter_pampotek/domain/entities/obat_entity.dart';
 
 class ObatModel {
   final String id;
@@ -35,8 +35,8 @@ class ObatModel {
   }
 
   // Konversi NoteModel ke NoteEntity
-  ObatEntitiy toEntity() {
-    return ObatEntitiy(
+  ObatEntity toEntity() {
+    return ObatEntity(
       id : id,
       namaObat: namaObat,
       deskripsiObat: deskripsiObat,
@@ -46,7 +46,7 @@ class ObatModel {
   }
 
   // Konversi NoteEntity ke NoteModel
-  static ObatModel fromEntity(ObatEntitiy entity) {
+  static ObatModel fromEntity(ObatEntity entity) {
     return ObatModel(
       id : entity.id,
       namaObat: entity.namaObat,

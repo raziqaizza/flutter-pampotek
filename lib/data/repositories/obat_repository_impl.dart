@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/data/models/obat_model.dart';
-import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
+import 'package:flutter_pampotek/domain/entities/obat_entity.dart';
 import 'package:flutter_pampotek/domain/repositories/obat_repository.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_pampotek/main.dart';
 
 class ObatRepositoryImpl implements ObatRepository {
   DatabaseReference db;
@@ -28,7 +30,7 @@ class ObatRepositoryImpl implements ObatRepository {
   }
 
   @override
-  Stream<List<ObatEntitiy>> getObat() {
+  Stream<List<ObatEntity>> getObat() {
     try {
       final uid = _getCurrentUserId();
 
@@ -64,7 +66,7 @@ class ObatRepositoryImpl implements ObatRepository {
 
                 return entity;
               })
-              .whereType<ObatEntitiy>()
+              .whereType<ObatEntity>()
               .toList();
         }
 
@@ -93,7 +95,7 @@ class ObatRepositoryImpl implements ObatRepository {
                 return ObatModel.fromJson({...obatMap, "id": index.toString()})
                     .toEntity();
               })
-              .whereType<ObatEntitiy>()
+              .whereType<ObatEntity>()
               .toList();
         }
         return [];
@@ -104,7 +106,7 @@ class ObatRepositoryImpl implements ObatRepository {
   }
 
   @override
-  Future<void> addObat(ObatEntitiy obat) async {
+  Future<void> addObat(ObatEntity obat) async {
     try {
       final uid = _getCurrentUserId();
 
@@ -132,8 +134,14 @@ class ObatRepositoryImpl implements ObatRepository {
       await _getObatRef().child(nextId.toString()).set({
         ...model.toJson(),
       });
+
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        const SnackBar(content: Text('Obat added successfully')),
+      );
     } catch (e) {
-      rethrow;
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text('Failed to update obat: $e')),
+      );
     }
   }
 
@@ -146,13 +154,19 @@ class ObatRepositoryImpl implements ObatRepository {
         throw Exception('Pengguna belum login');
       }
       await _getObatRef().child(id).remove();
+
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        const SnackBar(content: Text('Obat deleted successfully')),
+      );
     } catch (e) {
-      rethrow;
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text('Failed to delete obat: $e')),
+      );
     }
   }
 
   @override
-  Future<void> editObat(ObatEntitiy obat) async {
+  Future<void> editObat(ObatEntity obat) async {
     try {
       final uid = _getCurrentUserId();
 
@@ -167,8 +181,14 @@ class ObatRepositoryImpl implements ObatRepository {
       final model = ObatModel.fromEntity(obat);
 
       await _getObatRef().child(obat.id).update(model.toJson());
+
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        const SnackBar(content: Text('Obat updated successfully')),
+      );
     } catch (e) {
-      rethrow;
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text('Failed to update obat: $e')),
+      );
     }
   }
 }

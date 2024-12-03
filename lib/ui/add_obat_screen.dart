@@ -1,4 +1,4 @@
-import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
+import 'package:flutter_pampotek/domain/entities/obat_entity.dart';
 import 'package:flutter_pampotek/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/ui/providers/obat_provider.dart';
@@ -27,7 +27,7 @@ class _AddObatScreenState extends State<AddObatScreen> {
     String deskripsiObat = deskripsiObatController.text;
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
 
-    await Provider.of<ObatProvider>(context, listen: false).addObat(ObatEntitiy(
+    await Provider.of<ObatProvider>(context, listen: false).addObat(ObatEntity(
         id: "",
         namaObat: namaObat,
         deskripsiObat: deskripsiObat,

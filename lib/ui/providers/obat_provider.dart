@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
+import 'package:flutter_pampotek/domain/entities/obat_entity.dart';
 import 'package:flutter_pampotek/domain/usecases/add_obat.dart';
 import 'package:flutter_pampotek/domain/usecases/delete_obat.dart';
 import 'package:flutter_pampotek/domain/usecases/get_obat.dart';
@@ -11,7 +11,7 @@ class ObatProvider extends ChangeNotifier {
   final DeleteObat deleteObatUseCase; 
   final EditObat editObatUseCase; 
 
-  List<ObatEntitiy> obats = [];
+  List<ObatEntity> obats = [];
 
   ObatProvider({
     required this.addObatUseCase,
@@ -28,16 +28,16 @@ class ObatProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> addObat(ObatEntitiy obat) async {
-    await addObatUseCase(obat);
+  Future<void> addObat(ObatEntity obat) async {
+    await addObatUseCase(obat); // Panggil use case 
   }
 
-  Future<void> editObat(ObatEntitiy obat) async {
+  Future<void> editObat(ObatEntity obat) async {
     await editObatUseCase(obat);
   }
   
   Future<void> deleteObat(String id) async {
-    await deleteObatUseCase(id); // Panggil use case deleteNote
+    await deleteObatUseCase(id); 
     notifyListeners();
   }
 }

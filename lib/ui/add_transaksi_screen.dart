@@ -1,4 +1,4 @@
-import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
+import 'package:flutter_pampotek/domain/entities/obat_entity.dart';
 import 'package:flutter_pampotek/domain/entities/transaksi_entity.dart';
 import 'package:flutter_pampotek/theme.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +14,13 @@ class AddTransaksiScreen extends StatefulWidget {
 }
 
 List<String> list = <String>[];
+late List<ObatEntity> obats;
+int selectedStock = 0;
 
 class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
   final TextEditingController jumlahController = TextEditingController();
-  final String stok = "";
   String selectedNamaObat = '';
+  String selectedSelectedObatIndex = "-1";
 
   void toHomeScreen() {
     Navigator.pop(context);
@@ -26,24 +28,39 @@ class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
 
   void handleSubmit() async {
     print("add transaksi");
-    String namaObat = selectedNamaObat;
+
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
+
+    ObatEntity selectedObat =
+        obats[int.tryParse(selectedSelectedObatIndex) ?? 0];
 
     await Provider.of<TransaksiProvider>(context, listen: false).addTransaksi(
       TransaksiEntity(
         id: "",
-        namaObat: namaObat,
+        namaObat: selectedObat.namaObat,
         jumlahObat: jumlahObat,
-        hargaObat: 0,
+        hargaObat: selectedObat.hargaObat * jumlahObat,
         tanggal: DateTime.now(),
       ),
     );
+
+    print(selectedObat.id);
+
+    await Provider.of<ObatProvider>(context, listen: false).editObat(
+      ObatEntity(
+          id: selectedObat.id,
+          namaObat: selectedObat.namaObat,
+          deskripsiObat: selectedObat.deskripsiObat,
+          jumlahObat: selectedObat.jumlahObat - jumlahObat,
+          hargaObat: selectedObat.hargaObat),
+    );
+
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final obats =
-        ModalRoute.of(context)?.settings.arguments as List<ObatEntitiy>;
+    obats = ModalRoute.of(context)?.settings.arguments as List<ObatEntity>;
     list = obats.map((value) => value.namaObat).toList();
     return Scaffold(
       appBar: AppBar(
@@ -59,9 +76,9 @@ class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
           child: Column(
             children: [
               DropDownButton(
-                obats: obats,
                 onValueChanged: (value) {
                   setState(() {
+                    selectedSelectedObatIndex = list.indexOf(value).toString();
                     selectedNamaObat =
                         value; // Menyimpan nama obat yang dipilih
                   });
@@ -73,7 +90,12 @@ class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   MyCancelButton(text: "Batal", onPressed: toHomeScreen),
-                  MyButton(text: "Simpan", onPressed: handleSubmit)
+                  MyButton(
+                    text: "Simpan",
+                    onPressed: handleSubmit,
+                    jumlahController: jumlahController,
+                    selectedStock: selectedStock,
+                  ),
                 ],
               )
             ],
@@ -120,25 +142,67 @@ class MyTextForm extends StatelessWidget {
   }
 }
 
-class MyButton extends StatelessWidget {
-  const MyButton({super.key, required this.text, required this.onPressed});
+class MyButton extends StatefulWidget {
+  const MyButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    required this.jumlahController,
+    required this.selectedStock,
+  });
 
   final String text;
   final Function()? onPressed;
+  final TextEditingController jumlahController;
+  final int selectedStock;
+
+  @override
+  State<MyButton> createState() => _MyButtonState();
+}
+
+class _MyButtonState extends State<MyButton> {
+  bool isEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.jumlahController.addListener(_updateButtonState);
+  }
+
+  void _updateButtonState() {
+    int jumlahObat = int.tryParse(widget.jumlahController.text.trim()) ?? 0;
+    setState(() {
+      isEnabled = jumlahObat > 0 && jumlahObat <= widget.selectedStock;
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.jumlahController.removeListener(_updateButtonState);
+    selectedStock = 0;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: isEnabled
+          ? widget.onPressed
+          : null, // Tombol disabled jika isEnabled false
       style: ElevatedButton.styleFrom(
-          backgroundColor: MaterialTheme.lightScheme().primaryContainer,
-          textStyle:
-              TextStyle(color: MaterialTheme.lightScheme().onPrimaryContainer),
-          minimumSize: const Size(130, 50),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+        backgroundColor: isEnabled
+            ? MaterialTheme.lightScheme().primaryContainer
+            : MaterialTheme.lightScheme().onSurfaceVariant.withOpacity(0.5),
+        textStyle: TextStyle(
+          color: isEnabled
+              ? MaterialTheme.lightScheme().onPrimaryContainer
+              : MaterialTheme.lightScheme().onSurface.withOpacity(0.5),
+        ),
+        minimumSize: const Size(130, 50),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
       child: Text(
-        text,
+        widget.text,
         style: Theme.of(context).textTheme.titleMedium,
       ),
     );
@@ -172,10 +236,8 @@ class MyCancelButton extends StatelessWidget {
 }
 
 class DropDownButton extends StatefulWidget {
-  const DropDownButton(
-      {super.key, required this.obats, required this.onValueChanged});
+  const DropDownButton({super.key, required this.onValueChanged});
 
-  final List<ObatEntitiy> obats;
   final ValueChanged<String> onValueChanged;
 
   @override
@@ -184,33 +246,24 @@ class DropDownButton extends StatefulWidget {
 
 class _DropDownButtonState extends State<DropDownButton> {
   String dropdownValue = '';
-  int currentStock = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    dropdownValue = widget.obats.first.namaObat;
-    // currentStock = widget.obats.first.jumlahObat;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
-          "Stok: $currentStock",
+          "Stok: $selectedStock",
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(height: 10),
         DropdownMenu<String>(
           width: 300,
-          initialSelection: "",
+          hintText: "Pilih obat",
           onSelected: (String? value) {
             setState(() {
               dropdownValue = value!;
-              currentStock = widget.obats
-                  .firstWhere((obat) => obat.namaObat == value)
-                  .jumlahObat;
+              selectedStock =
+                  obats.firstWhere((obat) => obat.namaObat == value).jumlahObat;
             });
             widget.onValueChanged(dropdownValue);
           },

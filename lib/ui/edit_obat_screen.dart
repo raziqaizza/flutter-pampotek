@@ -1,4 +1,6 @@
-import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter_pampotek/domain/entities/obat_entity.dart';
 import 'package:flutter_pampotek/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/ui/providers/obat_provider.dart';
@@ -27,32 +29,36 @@ class _EditObatScreenState extends State<EditObatScreen> {
     String deskripsiObat = deskripsiObatController.text;
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
     int hargaObat = int.tryParse(hargaController.text.trim()) ?? 0;
+    int tambahJumlahObat =
+        int.tryParse(tambahJumlahController.text.trim()) ?? 0;
 
     await Provider.of<ObatProvider>(context, listen: false).editObat(
-        ObatEntitiy(
-            id: id,
-            namaObat: namaObat,
-            deskripsiObat: deskripsiObat,
-            jumlahObat: jumlahObat,
-            hargaObat: hargaObat));
+      ObatEntity(
+          id: id,
+          namaObat: namaObat,
+          deskripsiObat: deskripsiObat,
+          jumlahObat: jumlahObat + tambahJumlahObat,
+          hargaObat: hargaObat),
+    );
 
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final obat = ModalRoute.of(context)?.settings.arguments as ObatEntitiy;
+    final obat = ModalRoute.of(context)?.settings.arguments as ObatEntity;
 
     namaObatController.text = obat.namaObat;
+    hargaController.text = obat.hargaObat.toString();
     deskripsiObatController.text = obat.deskripsiObat;
     jumlahController.text = obat.jumlahObat.toString();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text("Edit obat"),
-        leading:
-            IconButton(onPressed: toHomeScreen, icon: Icon(Icons.arrow_back)),
+        title: const Text("Edit obat"),
+        leading: IconButton(
+            onPressed: toHomeScreen, icon: const Icon(Icons.arrow_back)),
       ),
       body: SafeArea(
         child: Container(
@@ -67,13 +73,14 @@ class _EditObatScreenState extends State<EditObatScreen> {
                     children: [
                       MyTextForm(
                           hint: "Nama Obat", controller: namaObatController),
-                      MyTextForm(hint: "Harga", controller: jumlahController),
+                      MyTextForm(hint: "Harga", controller: hargaController),
                       MyTextForm(
                           hint: "Deskripsi",
                           controller: deskripsiObatController),
                       MyTextForm(hint: "Jumlah", controller: jumlahController),
                       MyTextForm(
-                          hint: "Tambah", controller: tambahJumlahController),
+                          hint: "Tambah Jumlah",
+                          controller: tambahJumlahController),
                     ],
                   ),
                 ),
@@ -106,7 +113,7 @@ class MyTextForm extends StatelessWidget {
     TextInputType keyboardType = TextInputType.text;
     bool isEnabled = true;
 
-    if (hint == "Harga") {
+    if (hint == "Harga" || hint == "Tambah Jumlah") {
       keyboardType = TextInputType.number;
     } else {
       keyboardType = TextInputType.text;

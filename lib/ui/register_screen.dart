@@ -16,7 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   void handleRegister() {
-    String name = namaController.text;
+    // String name = namaController.text;
     String email = emailController.text;
     String password = passwordController.text;
 

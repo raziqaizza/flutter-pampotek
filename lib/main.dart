@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_pampotek/data/repositories/base_repository_impl.dart';
-import 'package:flutter_pampotek/data/repositories/transaksi_repository_impl.dart';
 import 'package:flutter_pampotek/di.dart';
 import 'package:flutter_pampotek/domain/usecases/add_obat.dart';
 import 'package:flutter_pampotek/domain/usecases/add_transaksi.dart';
@@ -24,6 +23,8 @@ import 'package:flutter_pampotek/ui/register_screen.dart';
 import 'package:provider/provider.dart';
 import 'util.dart';
 import 'theme.dart';
+
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
     MaterialTheme theme = MaterialTheme(textTheme);
     return MaterialApp(
       title: 'Pampotek',
+      scaffoldMessengerKey: scaffoldMessengerKey,
       theme: brightness == Brightness.light ? theme.light() : theme.dark(),
       initialRoute: '/',
       routes: {

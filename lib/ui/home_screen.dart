@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/data/repositories/auth_repository_impl.dart';
 import 'package:flutter_pampotek/di.dart';
-import 'package:flutter_pampotek/domain/entities/obat_entitiy.dart';
+import 'package:flutter_pampotek/domain/entities/obat_entity.dart';
 import 'package:flutter_pampotek/ui/providers/obat_provider.dart';
 import 'package:flutter_pampotek/ui/providers/transaksi_provider.dart';
 import 'package:provider/provider.dart';
@@ -23,11 +23,11 @@ class HomeScreen extends StatelessWidget {
       Navigator.pushNamed(context, "/addObat");
     }
 
-    void toEditObatScreen(ObatEntitiy obat) {
+    void toEditObatScreen(ObatEntity obat) {
       Navigator.pushNamed(context, "/editObat", arguments: obat);
     }
 
-    void toAddTransaksiScreen(List<ObatEntitiy> obats) {
+    void toAddTransaksiScreen(List<ObatEntity> obats) {
       print("to transaksi");
       Navigator.pushNamed(context, "/addTransaksi", arguments: obats);
     }
@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            flexibleSpace: AppBarCard(username: "username"),
+            flexibleSpace: AppBarCard(username: ""),
             automaticallyImplyLeading: false,
           ),
           body: SingleChildScrollView(
@@ -292,7 +292,7 @@ class AppBarCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Selamat datang, $username!",
+                "Selamat datang $username!",
                 style: TextStyle(
                     color: MaterialTheme.lightScheme().onTertiaryContainer),
               ),

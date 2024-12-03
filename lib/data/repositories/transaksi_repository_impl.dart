@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_pampotek/data/models/transaksi_model.dart';
 import 'package:flutter_pampotek/domain/entities/transaksi_entity.dart';
 import 'package:flutter_pampotek/domain/repositories/transaksi_repository.dart';
+import 'package:flutter_pampotek/main.dart';
 
 class TransaksiRepositoryImpl implements TransaksiRepository{
   DatabaseReference db;
@@ -41,7 +43,15 @@ class TransaksiRepositoryImpl implements TransaksiRepository{
 
       int nextId = 1;
       if (snapshot.exists) {
-        final data = snapshot.value as Map<dynamic, dynamic>;
+        Map<dynamic,dynamic> data;
+
+        if (snapshot.value is List<dynamic>) {
+          final dataList = snapshot.value as List<dynamic>;
+          data = dataList.asMap();
+        } else {
+          data = snapshot.value as Map<dynamic, dynamic>;
+        }
+
 
         // Ambil semua keys yang ada di Map dan tentukan ID berikutnya
         final validIds =
@@ -55,8 +65,14 @@ class TransaksiRepositoryImpl implements TransaksiRepository{
       await _getTransaksiRef().child(nextId.toString()).set({
         ...model.toJson(),
       });
+
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        const SnackBar(content: Text('Transaksi added successfully')),
+      );
     } catch (e) {
-      rethrow;
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text('Failed to add transaksi: $e')),
+      );
     }
   }
 
@@ -72,10 +88,14 @@ class TransaksiRepositoryImpl implements TransaksiRepository{
 
       // Menghapus transaksi berdasarkan ID
       await transaksiRef.child(id).remove();
-      print("Transaksi dengan ID $id berhasil dihapus");
+
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        const SnackBar(content: Text('Transaksi deleted successfully')),
+      );
     } catch (e) {
-      print("Error saat menghapus transaksi: $e");
-      rethrow;  // Propagasi error jika ada
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text('Failed to delete transaksi: $e')),
+      );
     }
   }
 
