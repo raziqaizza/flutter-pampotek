@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void toRegisterScreen() {
-    Navigator.pushReplacementNamed(context, "/register");
+    Navigator.pushNamed(context, "/register");
   }
 
   @override
