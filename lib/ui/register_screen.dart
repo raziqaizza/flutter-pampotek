@@ -16,10 +16,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   void handleRegister() {
-    // String name = namaController.text;
     String email = emailController.text;
     String password = passwordController.text;
-
     locator<AuthRepositoryImpl>().registerUser(context, email, password);
   }
 
@@ -38,10 +36,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               const MyHeaderText(text: "Daftarkan akun kamu."),
-              MyTextForm(
-                hint: "Nama",
-                controller: namaController,
-              ),
               MyTextForm(
                 hint: "Email Address",
                 controller: emailController,

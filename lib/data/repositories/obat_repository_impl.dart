@@ -61,9 +61,6 @@ class ObatRepositoryImpl implements ObatRepository {
                 final entity =
                     ObatModel.fromJson({...obatMap, "id": key}).toEntity();
 
-                // Debug: Print entity
-                print("Entity: ${entity.id}");
-
                 return entity;
               })
               .whereType<ObatEntity>()
@@ -84,13 +81,6 @@ class ObatRepositoryImpl implements ObatRepository {
                 if (obatJson == null) return null;
 
                 final obatMap = Map<String, dynamic>.from(obatJson as Map);
-
-                final entity =
-                    ObatModel.fromJson({...obatMap, "id": index.toString()})
-                        .toEntity();
-
-                // Debug: Print Entity
-                print("Entity: ${entity.id}");
 
                 return ObatModel.fromJson({...obatMap, "id": index.toString()})
                     .toEntity();

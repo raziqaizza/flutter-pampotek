@@ -41,9 +41,9 @@ class _AddObatScreenState extends State<AddObatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tambah obat"),
-        leading:
-            IconButton(onPressed: toHomeScreen, icon: Icon(Icons.arrow_back)),
+        title: const Text("Tambah obat"),
+        leading: IconButton(
+            onPressed: toHomeScreen, icon: const Icon(Icons.arrow_back)),
       ),
       body: Container(
         decoration: BoxDecoration(color: MaterialTheme.lightScheme().surface),

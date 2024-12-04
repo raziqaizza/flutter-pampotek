@@ -27,8 +27,6 @@ class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
   }
 
   void handleSubmit() async {
-    print("add transaksi");
-
     int jumlahObat = int.tryParse(jumlahController.text.trim()) ?? 0;
 
     ObatEntity selectedObat =
@@ -60,7 +58,7 @@ class _AddTransaksiScreenState extends State<AddTransaksiScreen> {
 
   @override
   Widget build(BuildContext context) {
-    obats = ModalRoute.of(context)?.settings.arguments as List<ObatEntity>;
+    obats = Provider.of<ObatProvider>(context).obats;
     list = obats.map((value) => value.namaObat).toList();
     return Scaffold(
       appBar: AppBar(

@@ -27,9 +27,8 @@ class HomeScreen extends StatelessWidget {
       Navigator.pushNamed(context, "/editObat", arguments: obat);
     }
 
-    void toAddTransaksiScreen(List<ObatEntity> obats) {
-      print("to transaksi");
-      Navigator.pushNamed(context, "/addTransaksi", arguments: obats);
+    void toAddTransaksiScreen() {
+      Navigator.pushNamed(context, "/addTransaksi");
     }
 
     return Container(
@@ -37,7 +36,7 @@ class HomeScreen extends StatelessWidget {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            flexibleSpace: AppBarCard(username: ""),
+            flexibleSpace: AppBarCard(),
             automaticallyImplyLeading: false,
           ),
           body: SingleChildScrollView(
@@ -85,8 +84,7 @@ class HomeScreen extends StatelessWidget {
                       const MyHeader(text: "Transaksi"),
                       MyTransaksiButton(
                         text: "Tambah",
-                        onPressed: () =>
-                            toAddTransaksiScreen(obatProvider.obats),
+                        onPressed: () => toAddTransaksiScreen(),
                       )
                     ],
                   ),
@@ -269,9 +267,7 @@ class ItemWidgetTransaksi extends StatelessWidget {
 }
 
 class AppBarCard extends StatelessWidget {
-  const AppBarCard({super.key, required this.username});
-
-  final String username;
+  const AppBarCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +288,7 @@ class AppBarCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Selamat datang $username!",
+                "Selamat datang!",
                 style: TextStyle(
                     color: MaterialTheme.lightScheme().onTertiaryContainer),
               ),

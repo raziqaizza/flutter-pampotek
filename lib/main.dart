@@ -24,7 +24,8 @@ import 'package:provider/provider.dart';
 import 'util.dart';
 import 'theme.dart';
 
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -91,7 +92,6 @@ class MyApp extends StatelessWidget {
 
   Widget _getInitialScreen() {
     final user = locator<AuthRepositoryImpl>().userSession();
-    print(user);
 
     if (user != null) {
       return const HomeScreen();

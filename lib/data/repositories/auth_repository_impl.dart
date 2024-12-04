@@ -27,7 +27,6 @@ class AuthRepositoryImpl implements AuthRepository {
         const SnackBar(content: Text('Registration successful')),
       );
 
-      // Kembali ke halaman login setelah berhasil
       Navigator.popAndPushNamed(context, "/login");
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

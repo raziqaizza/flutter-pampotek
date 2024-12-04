@@ -18,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void handleSubmit() {
     String email = emailController.text;
     String password = passwordController.text;
-
     locator<AuthRepositoryImpl>().loginUser(context, email, password);
   }
 
